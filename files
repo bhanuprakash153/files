@@ -1,0 +1,69 @@
+package com.example.Zschedulars.categories;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
+
+public class Example1 {
+
+    public static void main(String args[]) throws IOException {
+
+        String file = "/media/mani/HDD/bhanu/categories/abc.txt";
+
+        List<String> lines = new ArrayList<>();
+        List<String> final_lines = new ArrayList<>();
+        Map<String, Integer> duplicates = new HashMap<>();
+
+        Stream<String> stream = Files.lines(Paths.get(file));
+        stream.forEach(row -> {
+
+            lines.add(row);
+        });
+
+        lines.forEach(row -> {
+            if (!row.isEmpty()) {
+
+                if (row.split(",").length == 9) {
+
+                    final_lines.add(row);
+                    // System.out.println(final_lines);
+                }
+            }
+        });
+
+        final_lines.forEach(row -> {
+            String level1_category = row.split(",")[1];
+            String level1_display_name = row.split(",")[0];
+            String level1_img_url = row.split(",")[2];
+            String level2_category = row.split(",")[4];
+            String level2_display_name = row.split(",")[3];
+            String level2_img_url = row.split(",")[5];
+            String level3_category = row.split(",")[7];
+            String level3_display_name = row.split(",")[6];
+            String level3_img_url = row.split(",")[8];
+
+            level1_category = level1_category.contains("$$") ? level1_category.replace("$$", ",") : level1_category;
+
+            String check_duplicates = row.split(",")[3];
+
+            if (duplicates.containsKey(check_duplicates)) {
+
+                int counter = duplicates.get(check_duplicates);
+                duplicates.put(check_duplicates, counter + 1);
+                System.out.println(duplicates);
+
+            } else {
+
+                duplicates.put(check_duplicates, 1);
+            }
+
+
+        });
+
+    }
+}
